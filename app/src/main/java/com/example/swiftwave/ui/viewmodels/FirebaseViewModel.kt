@@ -90,7 +90,7 @@ class FirebaseViewModel(
         job = viewModelScope.launch {
             while (true) {
                 fetchAllChats()
-                delay(1000)
+                delay(5000)
             }
         }
     }
