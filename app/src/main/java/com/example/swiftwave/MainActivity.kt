@@ -14,6 +14,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -35,6 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.swiftwave.auth.GoogleAuthUiClient
 import com.example.swiftwave.ui.screens.accountScreen
 import com.example.swiftwave.ui.screens.chatScreen
+import com.example.swiftwave.ui.screens.editBioScreen
 import com.example.swiftwave.ui.screens.loginScreen
 import com.example.swiftwave.ui.screens.personChatScreen
 import com.example.swiftwave.ui.screens.settingsScreen
@@ -127,7 +131,9 @@ class MainActivity : ComponentActivity() {
                                             taskViewModel.showNavBar = false
                                             navController.navigate("Login")
                                         }
-                                    }
+                                    },
+                                    navController = navController,
+                                    firebaseViewModel = firebaseViewModel
                                 )
                             }
                             composable(route = "Settings"){
@@ -191,6 +197,12 @@ class MainActivity : ComponentActivity() {
                                 personChatScreen(
                                     firebaseViewModel = firebaseViewModel,
                                     taskViewModel = taskViewModel,
+                                    navController = navController
+                                )
+                            }
+                            composable(route = "EditBio"){
+                                editBioScreen(
+                                    firebaseViewModel = firebaseViewModel,
                                     navController = navController
                                 )
                             }

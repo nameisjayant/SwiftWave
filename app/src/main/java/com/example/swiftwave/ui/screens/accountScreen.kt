@@ -1,5 +1,6 @@
 package com.example.swiftwave.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,15 +27,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.swiftwave.auth.UserData
+import com.example.swiftwave.ui.viewmodels.FirebaseViewModel
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun accountScreen(
     userData: UserData?,
-    onSignOut: () -> Unit
+    onSignOut: () -> Unit,
+    navController: NavController,
+    firebaseViewModel: FirebaseViewModel
 ){
     Column(
         modifier = Modifier
@@ -98,6 +107,25 @@ fun accountScreen(
             fontSize = 15.sp,
             color = Color.Gray
         )
+        Spacer(modifier = Modifier.size(10.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    navController.navigate("EditBio")
+                },
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = firebaseViewModel.bio.toString()
+            )
+            Text(
+                text = "Bio",
+                fontSize = 15.sp,
+                color = Color.Gray
+            )
+        }
         Spacer(modifier = Modifier.size(10.dp))
         Button(onClick = {onSignOut()}) {
             Text(

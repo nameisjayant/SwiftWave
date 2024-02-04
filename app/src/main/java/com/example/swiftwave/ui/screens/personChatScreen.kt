@@ -147,7 +147,7 @@ fun personChatScreen(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground
                     )
-                    Spacer(modifier = Modifier.size(10.dp))
+                    Spacer(modifier = Modifier.size(15.dp))
                     Text(
                         text = firebaseViewModel.chattingWith?.mail.toString().substring(0,firebaseViewModel.chattingWith?.mail.toString().length-10),
                         fontSize = 25.sp,
@@ -159,6 +159,20 @@ fun personChatScreen(
                         fontSize = 15.sp,
                         color = Color.Gray
                     )
+                    if(firebaseViewModel.chattingWith?.bio!!.isNotEmpty()){
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text(
+                            text = firebaseViewModel.chattingWith?.bio.toString(),
+                            fontSize = 25.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = "Bio",
+                            fontSize = 15.sp,
+                            color = Color.Gray
+                        )
+                    }
                     Spacer(modifier = Modifier.size(20.dp))
                 }
             }

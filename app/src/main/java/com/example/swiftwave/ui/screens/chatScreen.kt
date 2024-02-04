@@ -55,7 +55,7 @@ fun chatScreen(
         ){
             if(contactList.value.isNotEmpty()){
                 items(contactList.value){
-                    if(it!=userData){
+                    if(it.userId!=userData.userId){
                         messageCard(
                             userData = it,
                             firebaseViewModel = firebaseViewModel,

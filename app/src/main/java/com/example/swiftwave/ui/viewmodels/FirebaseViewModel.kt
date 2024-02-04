@@ -18,18 +18,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class FirebaseViewModel(
-    val userData: UserData
+    var userData: UserData
 ) : ViewModel() {
 
-    lateinit var Chatdb: DatabaseReference
+    var Chatdb: DatabaseReference
+    var Userdb: DatabaseReference
     var chattingWith by mutableStateOf<UserData?>(null)
     var text by mutableStateOf("")
+    var bio by mutableStateOf(userData.bio)
 
     private val _allUsers = MutableStateFlow<List<UserData>>(emptyList())
     val allUsers : StateFlow<List<UserData>> get() = _allUsers.asStateFlow()
 
     init{
-        val Userdb = FirebaseDatabase.getInstance().getReference("Users")
+        Userdb = FirebaseDatabase.getInstance().getReference("Users")
         Chatdb = FirebaseDatabase.getInstance().getReference("ChatRoom")
         startPeriodicExecution()
         viewModelScope.launch {
@@ -38,10 +40,16 @@ class FirebaseViewModel(
                     _allUsers.value = dataSnapshot.getValue<MutableList<UserData>>()!!
                 }
             }.addOnSuccessListener {
-                val curList = allUsers.value.orEmpty().toMutableList()
-                if(!curList.contains(userData)){
+                val curList = allUsers.value.toMutableList()
+                if (!curList.any { it.userId == userData.userId }) {
                     curList.add(userData)
                     Userdb.setValue(curList)
+                }else{
+                    curList.forEach { existingUser ->
+                        if (existingUser.userId == userData.userId) {
+                            bio = existingUser.bio
+                        }
+                    }
                 }
             }
         }
@@ -97,5 +105,31 @@ class FirebaseViewModel(
 
     fun stopPeriodicExecution() {
         job?.cancel()
+    }
+
+    fun fetchAllUsers(){
+        viewModelScope.launch {
+            Userdb.get().addOnSuccessListener { dataSnapshot ->
+                if(dataSnapshot.exists()){
+                    _allUsers.value = dataSnapshot.getValue<MutableList<UserData>>()!!
+                }
+            }
+        }
+    }
+    fun updateBio() {
+        viewModelScope.launch {
+            val userIdToUpdate = userData.userId
+            val indexOfUserData = _allUsers.value.indexOfFirst { it.userId == userIdToUpdate }
+            if (indexOfUserData != -1) {
+                val existingUserData = _allUsers.value[indexOfUserData]
+                val newUserData = existingUserData.copy(bio = bio)
+                val updatedList = _allUsers.value.toMutableList()
+                updatedList[indexOfUserData] = newUserData
+                _allUsers.value = updatedList
+                Userdb.setValue(_allUsers.value)
+                userData.bio = bio
+            }
+        }
+        fetchAllUsers()
     }
 }
