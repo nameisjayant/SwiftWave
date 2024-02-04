@@ -10,6 +10,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -69,7 +72,9 @@ class MainActivity : ComponentActivity() {
                     val bottomBarList = taskViewModel.initialiseBottomNavBar()
                     Scaffold (
                         bottomBar = {
-                            if(taskViewModel.showNavBar){
+                            AnimatedVisibility(
+                                visible = taskViewModel.showNavBar,
+                            ){
                                 NavigationBar (
                                     containerColor = Color.Transparent
                                 ){
