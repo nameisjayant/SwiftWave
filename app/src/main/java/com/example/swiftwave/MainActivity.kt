@@ -33,8 +33,10 @@ import com.example.swiftwave.auth.GoogleAuthUiClient
 import com.example.swiftwave.ui.screens.accountScreen
 import com.example.swiftwave.ui.screens.chatScreen
 import com.example.swiftwave.ui.screens.loginScreen
+import com.example.swiftwave.ui.screens.personChatScreen
 import com.example.swiftwave.ui.screens.settingsScreen
 import com.example.swiftwave.ui.theme.SwiftWaveTheme
+import com.example.swiftwave.ui.viewmodels.FirebaseViewModel
 import com.example.swiftwave.ui.viewmodels.SignInViewModel
 import com.example.swiftwave.ui.viewmodels.TaskViewModel
 import com.google.android.gms.auth.api.identity.Identity
@@ -56,6 +58,7 @@ class MainActivity : ComponentActivity() {
         )
         super.onCreate(savedInstanceState)
         val taskViewModel = TaskViewModel()
+        lateinit var firebaseViewModel: FirebaseViewModel
         setContent {
             SwiftWaveTheme {
                 Surface(
@@ -65,16 +68,11 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val bottomBarList = taskViewModel.initialiseBottomNavBar()
                     Scaffold (
-                        containerColor = if(!taskViewModel.isSignedIn){
-                            Color(210, 240, 255 )
-                        }else{
-                            Color.Transparent
-                        },
                         bottomBar = {
-                            NavigationBar (
-                                containerColor = Color.Transparent
-                            ){
-                                if(taskViewModel.isSignedIn){
+                            if(taskViewModel.showNavBar){
+                                NavigationBar (
+                                    containerColor = Color.Transparent
+                                ){
                                     bottomBarList.forEachIndexed { index, item ->
                                         NavigationBarItem(
                                             selected = index == taskViewModel.selected,
@@ -103,7 +101,12 @@ class MainActivity : ComponentActivity() {
                     ){
                         NavHost(navController = navController, startDestination = "Login"){
                             composable(route = "Chats"){
-                                chatScreen(taskViewModel)
+                                chatScreen(
+                                    taskViewModel = taskViewModel,
+                                    firebaseViewModel = firebaseViewModel,
+                                    userData = googleAuthUiClient.getSignedInUser()!!,
+                                    navController = navController
+                                )
                             }
                             composable(route = "Account"){
                                 accountScreen(
@@ -116,7 +119,7 @@ class MainActivity : ComponentActivity() {
                                                 "Signed out",
                                                 Toast.LENGTH_LONG
                                             ).show()
-                                            taskViewModel.isSignedIn = false
+                                            taskViewModel.showNavBar = false
                                             navController.navigate("Login")
                                         }
                                     }
@@ -131,7 +134,8 @@ class MainActivity : ComponentActivity() {
 
                                 LaunchedEffect(key1 = googleAuthUiClient.getSignedInUser()) {
                                     if(googleAuthUiClient.getSignedInUser() != null) {
-                                        taskViewModel.isSignedIn = true
+                                        taskViewModel.showNavBar = true
+                                        firebaseViewModel = FirebaseViewModel(googleAuthUiClient.getSignedInUser()!!)
                                         navController.navigate("Chats")
                                     }
                                 }
@@ -157,7 +161,8 @@ class MainActivity : ComponentActivity() {
                                             "Sign in successful",
                                             Toast.LENGTH_LONG
                                         ).show()
-                                        taskViewModel.isSignedIn = true
+                                        taskViewModel.showNavBar = true
+                                        firebaseViewModel = FirebaseViewModel(googleAuthUiClient.getSignedInUser()!!)
                                         navController.navigate("Chats")
                                         viewModel.resetState()
                                     }
@@ -175,6 +180,13 @@ class MainActivity : ComponentActivity() {
                                             )
                                         }
                                     }
+                                )
+                            }
+                            composable(route = "PersonChat"){
+                                personChatScreen(
+                                    firebaseViewModel = firebaseViewModel,
+                                    taskViewModel = taskViewModel,
+                                    navController = navController
                                 )
                             }
                         }

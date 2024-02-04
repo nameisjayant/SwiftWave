@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,59 +45,64 @@ fun loginScreen(
             ).show()
         }
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.loginicon),
-            contentDescription = null,
-            tint = Color.Unspecified,
-            modifier = Modifier.size(250.dp)
-        )
-        Spacer(modifier = Modifier.size(50.dp))
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(130, 194, 227)
+    ){
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Say hello to a world of Endless Possibilities. Let the chatting begin!",
-                color = Color.Black,
-                lineHeight = 45.sp,
-                fontSize = 35.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 25.dp)
+            Icon(
+                painter = painterResource(id = R.drawable.loginicon),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier.size(250.dp)
             )
-            Spacer(modifier = Modifier.size(20.dp))
-            Button(
-                onClick = {onSignInClick()},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(51, 129, 169 )
-                )
+            Spacer(modifier = Modifier.size(50.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround
-                ){
-                    Text(
-                        text = "Get Started",
-                        fontSize = 30.sp,
-                        modifier = Modifier.padding(10.dp),
-                        color = Color.White
+                Text(
+                    text = "Say hello to a world of Endless Possibilities. Let the chatting begin!",
+                    color = Color.Black,
+                    lineHeight = 45.sp,
+                    fontSize = 35.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 25.dp)
+                )
+                Spacer(modifier = Modifier.size(20.dp))
+                Button(
+                    onClick = {onSignInClick()},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(51, 129, 169 )
                     )
-                    Icon(
-                        painter = painterResource(id = R.drawable.googleicon),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                        modifier = Modifier.size(50.dp)
-                    )
+                ) {
+                    Row (
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ){
+                        Text(
+                            text = "Get Started",
+                            fontSize = 30.sp,
+                            modifier = Modifier.padding(10.dp),
+                            color = Color.White
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.googleicon),
+                            contentDescription = null,
+                            tint = Color.Unspecified,
+                            modifier = Modifier.size(50.dp)
+                        )
+                    }
                 }
             }
         }

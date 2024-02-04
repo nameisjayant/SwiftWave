@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -90,7 +89,7 @@ fun accountScreen(
             fontSize = 20.sp,
         )
         Text(
-            text = "User ID",
+            text = "User Tag",
             fontSize = 15.sp,
             color = Color.Gray
         )
